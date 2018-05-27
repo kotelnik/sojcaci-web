@@ -137,9 +137,9 @@ class ApiHelper {
     static function copyUser($db_row) {
         $copy = array();
         $copy['id'] = (int) $db_row['id'];
-        $copy['first_name'] = $db_row['firstName'];
-        $copy['last_name'] = $db_row['lastName'];
-        $copy['nick_name'] = $db_row['nickName'];
+        $copy['first_name'] = $db_row['first_name'];
+        $copy['last_name'] = $db_row['last_name'];
+        $copy['nick_name'] = $db_row['nick_name'];
         $copy['is_child'] = (int) $db_row['is_child'];
         return $copy;
     }
