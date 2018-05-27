@@ -63,7 +63,7 @@ class ApiHelper {
         }
     }
 
-    static function performOneOrAll($base_url, $callback) {
+    static function performOneOrAll($sql, $callback) {
         // connect to database
         $connection = Connection::connectForRead();
 
@@ -73,7 +73,6 @@ class ApiHelper {
 
         $one_result = $sql_where != '';
 
-        $sql = 'SELECT id,first_name,last_name,nick_name,is_child FROM web_user';
         if ($one_result) {
             $sql = $sql.' WHERE '.$sql_where;
         }
@@ -99,17 +98,16 @@ class ApiHelper {
         ApiHelper::printJsonResult($result);
     }
 
-    static function loadPersonReduced($id, $connection) {
+    static function loadUserReduced($id, $connection) {
         if ($id == null) {
             return null;
         }
         $row = mysqli_fetch_array(mysqli_query($connection, 'SELECT id,nick_name,is_child FROM web_user WHERE id='.$id));
         $item = ApiHelper::copyUserReduced($row);
-        $item = ApiHelper::loadHasChallenge($row['id'], $connection, $item);
         return $item;
     }
 
-    static function loadPerson($id, $connection) {
+    static function loadUser($id, $connection) {
         if ($id == null) {
             return null;
         }
@@ -130,8 +128,24 @@ class ApiHelper {
         $copy = array();
         $copy['id'] = (int) $db_row['id'];
         $copy['nick_name'] = $db_row['nick_name'];
-        $copy['is_child'] = (int) $db_row['is_child'];
         return $copy;
+    }
+
+    static function getUserDisplayName($db_row) {
+        $first_name = $db_row['first_name'];
+        $last_name = $db_row['last_name'];
+        $nick_name = $db_row['nick_name'];
+        $display_name = $nick_name;
+        if (empty($first_name) && empty($last_name)) {
+            return $display_name;
+        }
+        if (!empty($first_name) && !empty($last_name)) {
+            return $display_name . ' (' . $first_name . ' ' . $last_name . ')';
+        }
+        if (!empty($first_name)) {
+            return $display_name . ' (' . $first_name . ')';
+        }
+        return $display_name . ' (' . $last_name . ')';
     }
 
     static function copyUser($db_row) {
@@ -140,15 +154,20 @@ class ApiHelper {
         $copy['first_name'] = $db_row['first_name'];
         $copy['last_name'] = $db_row['last_name'];
         $copy['nick_name'] = $db_row['nick_name'];
-        $copy['is_child'] = (int) $db_row['is_child'];
+        $copy["display_name"] = ApiHelper::getUserDisplayName($db_row);
+        $copy['email'] = $db_row['email'];
+        $copy['email_notifications_enabled'] = $db_row['email_notifications_enabled'];
+        $copy['last_login'] = $db_row['last_login'];
+        $copy['notes'] = $db_row['notes'];
+        $copy['is_child'] = (int) $db_row['is_child'] === 1;
         return $copy;
     }
 
     static function copyChallenge($db_row, $connection) {
         $copy = array();
         $copy['id'] = (int) $db_row['id'];
-        $copy['creator'] = ApiHelper::loadPersonReduced($db_row['creatorId'], $connection);
-        $copy['executer'] = ApiHelper::loadPersonReduced($db_row['executerId'], $connection);
+        $copy['creator'] = ApiHelper::loadUserReduced($db_row['creatorId'], $connection);
+        $copy['executer'] = ApiHelper::loadUserReduced($db_row['executerId'], $connection);
         $copy['title'] = $db_row['title'];
         $copy['description'] = $db_row['description'];
         $copy['created'] = $db_row['created'];

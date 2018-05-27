@@ -6,8 +6,11 @@ DROP TABLE IF EXISTS web_clubroom_picture;
 DROP TABLE IF EXISTS web_news_picture;
 DROP TABLE IF EXISTS web_team_picture;
 DROP TABLE IF EXISTS web_event_picture;
-DROP TABLE IF EXISTS web_event_responsible;
+DROP TABLE IF EXISTS web_event_responsible_user;
+DROP TABLE IF EXISTS web_event_responsible_team;
 DROP TABLE IF EXISTS web_permission;
+DROP TABLE IF EXISTS web_event_target_team;
+DROP TABLE IF EXISTS web_event_target_group;
 DROP TABLE IF EXISTS web_document;
 DROP TABLE IF EXISTS web_picture;
 DROP TABLE IF EXISTS web_document_hierarchy;
@@ -77,13 +80,17 @@ CREATE TABLE web_team (
     boys BIT NOT NULL DEFAULT 0,
     girls BIT NOT NULL DEFAULT 0,
     age_description VARCHAR(100) NOT NULL,
+    meeting_day INT NULL,
+    meeting_from TIME NULL,
+    meeting_to TIME NULL,
+    meeting_other VARCHAR(250) NULL,
     CONSTRAINT FOREIGN KEY (clubroom_id) REFERENCES web_clubroom (id),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE web_news (
     id INT NOT NULL AUTO_INCREMENT,
-    text VARCHAR(4096) NULL,
+    description VARCHAR(4096) NULL,
     created DATETIME NOT NULL,
     visible_until DATETIME NULL,
     author_id INT NOT NULL,
@@ -94,7 +101,7 @@ CREATE TABLE web_news (
 CREATE TABLE web_event (
     id INT NOT NULL AUTO_INCREMENT,
     subject VARCHAR(1024) NOT NULL,
-    text VARCHAR(4096) NOT NULL,
+    description VARCHAR(4096) NOT NULL,
     created DATETIME NOT NULL,
     date_from DATETIME NOT NULL,
     date_to DATETIME NOT NULL,
@@ -125,6 +132,7 @@ CREATE TABLE web_picture (
     name VARCHAR(250) NOT NULL,
     path VARCHAR(1024) NOT NULL,
     picture_hierarchy_id INT NOT NULL,
+    in_gallery BIT NOT NULL DEFAULT 0,
     CONSTRAINT FOREIGN KEY (picture_hierarchy_id) REFERENCES web_picture_hierarchy (id),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -148,14 +156,36 @@ CREATE TABLE web_permission (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE web_event_responsible (
+CREATE TABLE web_event_responsible_user (
     event_id INT NOT NULL,
     user_id INT NULL,
-    group_id INT NULL,
     CONSTRAINT FOREIGN KEY (event_id) REFERENCES web_event (id),
     CONSTRAINT FOREIGN KEY (user_id) REFERENCES web_user (id),
+    PRIMARY KEY (event_id, user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE web_event_responsible_team (
+    event_id INT NOT NULL,
+    team_id INT NULL,
+    CONSTRAINT FOREIGN KEY (event_id) REFERENCES web_event (id),
+    CONSTRAINT FOREIGN KEY (team_id) REFERENCES web_team (id),
+    PRIMARY KEY (event_id, team_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE web_event_target_group (
+    event_id INT NOT NULL,
+    group_id INT NULL,
+    CONSTRAINT FOREIGN KEY (event_id) REFERENCES web_event (id),
     CONSTRAINT FOREIGN KEY (group_id) REFERENCES web_group (id),
-    PRIMARY KEY (event_id, user_id, group_id)
+    PRIMARY KEY (event_id, group_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE web_event_target_team (
+    event_id INT NOT NULL,
+    team_id INT NULL,
+    CONSTRAINT FOREIGN KEY (event_id) REFERENCES web_event (id),
+    CONSTRAINT FOREIGN KEY (team_id) REFERENCES web_team (id),
+    PRIMARY KEY (event_id, team_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE web_event_picture (

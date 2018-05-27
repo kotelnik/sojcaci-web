@@ -1,0 +1,476 @@
+Services:
+
+/user
+    - vrací seznam uživatelů
+    [
+        {
+            "id": 1,
+            "display_name": "Krolík"
+        },
+        {
+            "id": 2,
+            "display_name": "Kotelník"
+        }
+    ]
+
+/user?permissions=true
+ - vrací seznam uživatelů s permissions
+    [
+        {
+            "id": 1,
+            "display_name": "Krolík"
+            "permissions": {
+                "administration": true,
+                "another": false
+            }
+        },
+        {
+            "id": 2,
+            "display_name": "Kotelník"
+            "permissions": {
+                "administration": true,
+                "another": false
+            }
+        }
+    ]
+
+/user?id=1
+    - vrací detail uživatele
+    {
+        "id": 1,
+        "first_name": null,
+        "last_name": null,
+        "nick_name": "Krolík",
+        "display_name": "Krolík",
+        "email": "mail@mail.cz",
+        "email_notifications_enabled": false,
+        "last_login": "TODO",
+        "notes": "alergie na windows",
+        "is_child": 0
+    }
+ 
+/loggedUser
+    {
+        "id": 1,
+        "first_name": null,
+        "last_name": null,
+        "nick_name": "Krolík",
+        "display_name": "Krolík",
+        "email": "mail@mail.cz",
+        "email_notifications_enabled": false,
+        "last_login": "TODO",
+        "notes": "alergie na windows",
+        "is_child": 0,
+        "permissions": {
+            "administration": true,
+            "another": false
+        }
+    }
+ 
+/permission?userId=1
+ - vrací permissions uživatele
+ {
+  "administration": true,
+  "another": false
+ }
+
+/permission
+ {
+  "administration": [
+    {
+        "id": 1,
+        "display_name": "Krolík"
+    },
+    {
+        "id": 2,
+        "display_name": "Kotelník"
+    }
+  ],
+  "another": []
+ }
+
+/news?latest=true
+    - maximálně 5 poslednícha aktualit
+    [
+        {
+            "id": 1,
+            "description": "Aktualita 1",
+            "created": TODO,
+            "visible_until": TODO
+        }
+    ]
+ 
+/news
+    - všechny aktuality
+    [
+        {
+            "id": 1,
+            "description": "Aktualita 1",
+            "created": TODO,
+            "visible_until": TODO,
+            "author": {
+                "id": 2,
+                "display_name": "Kotelník"
+            }
+        }
+    ]
+
+/news?id=1
+    - detail
+    {
+        "id": 1,
+        "description": "Aktualita 1",
+        "created": TODO,
+        "visible_until": TODO,
+        "author": {
+            "id": 2,
+            "display_name": "Kotelník"
+        }
+    }
+
+/event?future=true
+    - všechny budoucí
+    - včetně právě probíhajících
+    [
+        {
+            "id": 1,
+            "subject": "Akce 1",
+            "description": "popis",
+            "date_from": TODO,
+            "date_to": TODO,
+            "responsible": [
+                {
+                    "type": "other",
+                    "other": "Hanka Pacinová :)"
+                    "user": null,
+                    "group": null
+                },
+                {
+                    "type": "user",
+                    "other": null
+                    "user": {
+                        "id": 1,
+                        "display_name": "Krolík"
+                    }
+                    "group": null
+                },
+                {
+                    "type": "group",
+                    "other": null
+                    "user": null,
+                    "group": {
+                        "id": 1,
+                        "name": "Veverky"
+                    }
+                }
+            ],
+            "target": [
+                {
+                    "type": "group",
+                    "group": {
+                        "id": 1,
+                        "name": "16 let a více"
+                    }
+                    "team": null
+                },
+                {
+                    "type": "team",
+                    "group": null,
+                    "team": {
+                        "id": 1,
+                        "name": "Kolibříci"
+                    }
+                }
+            ]
+        }
+    ]
+
+/event?upcomming=true
+    - minimálně 3 nadcházející akce s date_from < 2 týdny dopředu
+    - včetně právě probíhajících
+    [
+        {
+            "id": 1,
+            "subject": "Akce 1",
+            "description": "popis",
+            "date_from": TODO,
+            "date_to": TODO,
+            "responsible": [
+                {
+                    "type": "other",
+                    "other": "Hanka Pacinová :)"
+                    "user": null,
+                    "group": null
+                },
+                {
+                    "type": "user",
+                    "other": null
+                    "user": {
+                        "id": 1,
+                        "display_name": "Krolík"
+                    }
+                    "group": null
+                },
+                {
+                    "type": "group",
+                    "other": null
+                    "user": null,
+                    "group": {
+                        "id": 1,
+                        "name": "Veverky"
+                    }
+                }
+            ],
+            "target": [
+                {
+                    "type": "group",
+                    "group": {
+                        "id": 1,
+                        "name": "16 let a více"
+                    }
+                    "team": null
+                },
+                {
+                    "type": "team",
+                    "group": null,
+                    "team": {
+                        "id": 1,
+                        "name": "Kolibříci"
+                    }
+                }
+            ]
+        }
+    ]
+
+/event?past=true
+    - všechny proběhlé akce - pokud je date_to < now
+    [
+        {
+            "id": 1,
+            "subject": "Akce 1",
+            "description": "popis",
+            "date_from": TODO,
+            "date_to": TODO,
+            "responsible": [
+                {
+                    "type": "other",
+                    "other": "Hanka Pacinová :)"
+                    "user": null,
+                    "group": null
+                },
+                {
+                    "type": "user",
+                    "other": null
+                    "user": {
+                        "id": 1,
+                        "display_name": "Krolík"
+                    }
+                    "group": null
+                },
+                {
+                    "type": "group",
+                    "other": null
+                    "user": null,
+                    "group": {
+                        "id": 1,
+                        "name": "Veverky"
+                    }
+                }
+            ],
+            "target": [
+                {
+                    "type": "group",
+                    "group": {
+                        "id": 1,
+                        "name": "16 let a více"
+                    }
+                    "team": null
+                },
+                {
+                    "type": "team",
+                    "group": null,
+                    "team": {
+                        "id": 1,
+                        "name": "Kolibříci"
+                    }
+                }
+            ]
+        }
+    ]
+
+/event?id=1
+    {
+        "id": 1,
+        "subject": "Akce 1",
+        "description": "popis",
+        "created": TODO,
+        "date_from": TODO,
+        "date_to": TODO,
+        "author": {
+            "id": 1,
+            "display_name": "Krolík"
+        },
+        "responsible": [
+            {
+                "type": "other",
+                "other": "Hanka Pacinová :)"
+                "user": null,
+                "team": null
+            },
+            {
+                "type": "user",
+                "other": null
+                "user": {
+                    "id": 1,
+                    "display_name": "Krolík"
+                }
+                "team": null
+            },
+            {
+                "type": "team",
+                "other": null
+                "user": null,
+                "team": {
+                    "id": 1,
+                    "name": "Kolibříci"
+                }
+            }
+        ]
+        "target": [
+            {
+                "type": "group",
+                "group": {
+                    "id": 1,
+                    "name": "16 let a více"
+                }
+                "team": null
+            },
+            {
+                "type": "team",
+                "group": null,
+                "team": {
+                    "id": 1,
+                    "name": "Kolibříci"
+                }
+            }
+        ]
+    }
+
+/team
+    - všechny teamy
+    [
+        {
+            "id": 1,
+            "name": "Kolibříci"
+        },
+        {
+            "id": 2,
+            "name": "Žirafky"
+        }
+    ]
+
+/team?id=1
+    - detail, bez administrace, tedy bez seznamu memberů
+    - member_count počet memberů
+    {
+        "id": 1,
+        "name": "Kolibříci",
+        "clubroom": {
+            "id": 1,
+            "name": "Na Hrázi"
+        },
+        "boys": true,
+        "girls": true,
+        "age_description": "6. - 9. třída",
+        "leaders": [
+            {
+                "id": 1,
+                "display_name": "Krolík"
+            }
+        ],
+        "subleaders": [
+            {
+                "id": 1,
+                "display_name": "Krolík"
+            }
+        ]
+        "member_count": 7,
+        "pictures": [
+            {
+                "id": 1,
+                "name": "My holky",
+                "thumbnail": "/pictures/thumbnails/lkjdlksdfds1.jpg",
+                "full": "/pictures/lkjdlksdfds1.jpg"
+            },
+            {
+                "id": 2,
+                "name": "My kluci",
+                "thumbnail": "/pictures/thumbnails/lkjdlksdfds2.jpg",
+                "full": "/pictures/lkjdlksdfds2.jpg"
+            }
+        ],
+        "meeting": {
+            "day": 4,
+            "from": "16:00",
+            "to": "17:30",
+            "other": null
+        }
+    }
+    
+/team?id=1&administration=true
+    - detail, s administrací, tedy se seznamemem memberů
+    - v memberech může být i leader nebo subleader
+    {
+        "id": 1,
+        "name": "Kolibříci",
+        "clubroom": {
+            "id": 1,
+            "name": "Na Hrázi"
+        },
+        "boys": true,
+        "girls": true,
+        "age_description": "6. - 9. třída",
+        "leaders": [
+            {
+                "id": 1,
+                "display_name": "Krolík"
+            }
+        ],
+        "subleaders": [
+            {
+                "id": 1,
+                "display_name": "Krolík"
+            }
+        ]
+        "members": [
+            {
+                "id": 1,
+                "display_name": "Krolík"
+            },
+            {
+                "id": 3,
+                "display_name": "Upír"
+            }
+        ],
+        "pictures": [
+            {
+                "id": 1,
+                "name": "My holky",
+                "thumbnail": "/pictures/thumbnails/lkjdlksdfds1.jpg",
+                "full": "/pictures/lkjdlksdfds1.jpg"
+            },
+            {
+                "id": 2,
+                "name": "My kluci",
+                "thumbnail": "/pictures/thumbnails/lkjdlksdfds2.jpg",
+                "full": "/pictures/lkjdlksdfds2.jpg"
+            }
+        ],
+        "meeting": {
+            "day": 4,
+            "from": "16:00",
+            "to": "17:30",
+            "other": null
+        }
+    }
+    

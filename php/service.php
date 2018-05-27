@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$KNOWN_API_PATHS = ['/user'];
+$KNOWN_API_PATHS = ['/user', '/news', '/event', '/team'];
 
 if (!isset($_GET['path'])) {
     http_response_code(400);
