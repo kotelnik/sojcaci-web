@@ -1,0 +1,29 @@
+<h2>Uživatelé</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Zobrazovací jméno</th>
+      <th>Křestní</th>
+      <th>Příjmení</th>
+      <th>Přezdívka</th>
+      <th>Email</th>
+      <th>Dostávat emaily?</th>
+      <th>Poznámky</th>
+      <th>Je to dítě?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td> {{ user.id }} </td>
+      <td> {{ user.display_name }} </td>
+      <td> {{ user.first_name }} </td>
+      <td> {{ user.last_name }} </td>
+      <td> {{ user.nick_name }} </td>
+      <td> {{ user.email }} </td>
+      <td> {{ user.email_notifications_enabled }} </td>
+      <td> {{ user.notes }} </td>
+      <td> {{ user.is_child }} </td>
+    </tr>
+  </tbody>
+</table>

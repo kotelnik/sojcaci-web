@@ -1,0 +1,8 @@
+<div *ngIf="messageService.messages.length">
+  <h4>Zprávy:</h4>
+  <p *ngFor="let message of messages">
+    <a (click)="closeMessage(message)">
+      {{ message.type }}: {{ message.text }}
+    </a>
+  </p>
+</div>

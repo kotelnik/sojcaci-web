@@ -1,0 +1,11 @@
+<h3>Vybraná aktualita</h3>
+<div *ngIf="news">
+  <div>
+    Popis: {{ news.description }}
+  </div>
+  <div>
+    Vytvořeno: {{ news.created }}
+  </div>
+</div>
+<button (click)="goBack()">Zpět</button>
+

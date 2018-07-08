@@ -1,0 +1,20 @@
+<h2>Aktuality</h2>
+<h3>Nová aktualita</h3>
+<form>
+  <input name="description" [(ngModel)]="newNews.description" placeholder="popis">
+</form>
+<h3>Stávající aktuality</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Popis</th>
+      <th>Vytvořeno</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let news of newss">
+      <td><a routerLink="/news/{{ news.id }}">{{ news.description }}</a></td>
+      <td>{{ news.created }}</td>
+    </tr>
+  </tbody>
+</table>
